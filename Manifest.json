@@ -1,0 +1,26 @@
+{
+    "name": "MCProfRating",
+    "description": "Displays professors ratings when looking up courses",
+    "version": "0.1",
+    "permissions": [
+    "tabs","<all_urls>"
+    ],
+    "browser_action": {
+    },
+
+    "content_scripts": [
+        {
+        "matches": [
+            "http://ssb.banner.marist.edu/PROD11G/bwskfcls.P_GetCrse/*",
+            "https://ssb.banner.marist.edu/PROD11G/bwskfcls.P_GetCrse/*"
+            ],
+        "js": ["jquery.min.js","content.js"],
+        "run_at": "document_start"
+        }
+    ],
+    "background":{
+      "scripts":["background.js"],
+      "persistent": false
+    },
+    "manifest_version":2
+}
