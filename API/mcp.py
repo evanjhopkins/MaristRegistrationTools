@@ -5,8 +5,11 @@ import re
 import json
 import mechanize
 import sys
+import sqlite3
 
 def main():
+	conn = sqlite3.connect("cache.db")
+
 	name = clean_name(sys.argv[1])
 	urlencoded_name = name.replace (" ", "+")
 	url = "http://search.mtvnservices.com/typeahead/suggest/?solrformat=true&rows=10&callback=jQuery111009371809768490493_1447205824799&prefix="+urlencoded_name+"&qf=teacherfullname_t%5E1000+teacherfullname_autosuggest&bf=pow(total_number_of_ratings_i%2C2.1)&defType=edismax&siteName=rmp&group=off&group.field=content_type_s&group.limit=20&fq=content_type_s%3ATEACHER&fq=schoolname_t%3A%22Marist+College%22&fq=schoolid_s%3A563"
@@ -38,6 +41,7 @@ def main():
 	rating = str(crawlURL(url))
 
 	print rating
+	conn.close()
 
 def clean_name(name):
 	exploded_name = string.split(name, " ")
