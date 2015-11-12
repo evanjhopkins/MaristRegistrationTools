@@ -2,6 +2,7 @@
 
 document.addEventListener('DOMContentLoaded', fireContentLoadedEvent, false);
 
+searched = [];
 function fireContentLoadedEvent () {
     var prof, rating;
     if($(".captiontext").text()==="Sections Found"){
@@ -9,8 +10,11 @@ function fireContentLoadedEvent () {
         $(elem).html("(<span class='rating'>?.?</span>) "+  $(elem).html());
 
         prof = $(elem).context.innerText;
-        var name = clean_name(prof);
-        search_for_prof(name, elem);
+        if ($.inArray(prof, searched) == -1){
+          searched.push(prof);
+          var name = clean_name(prof);
+          search_for_prof(name, elem);
+        }
       });
     }
 }
@@ -61,10 +65,15 @@ function add_rating_to_prof(rating, elem){
         color = "red";
       }
     } 
-    //$(elem).html("(<span style='color:"+color+";'>"+rating+"</span>) "+  $(elem).html());
-    $(elem).find(".rating").css("color", color);
-    $(elem).find(".rating").html(rating);
 
+    prof = $(elem).context.innerText;
+    $(".datadisplaytable tr td:nth-child(17)").each(function (i,elem2) {
+      prof2 = $(elem2).context.innerText;
+      if (prof == prof2){
+        $(elem2).find(".rating").css("color", color);
+        $(elem2).find(".rating").html(rating);
+      }
+    });
 }
 
 //cleans the name displayed on marist course lookup in prep for search
