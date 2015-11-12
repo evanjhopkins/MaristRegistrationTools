@@ -1,13 +1,12 @@
 {
-    "name": "MCProfRating",
-    "description": "Displays professors ratings when looking up courses",
-    "version": "0.1",
+    "name": "MaristRegistrationTools",
+    "description": "Tools for the Marist registration process",
+    "version": "0.2",
     "permissions": [
     "tabs","<all_urls>"
     ],
     "browser_action": {
     },
-
     "content_scripts": [
         {
         "matches": [
