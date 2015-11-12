@@ -1,14 +1,13 @@
 // alert("hello");
 
 document.addEventListener('DOMContentLoaded', fireContentLoadedEvent, false);
-var mem_cache = {};
-var cnt = 0;
-var professors = [];
 
 function fireContentLoadedEvent () {
     var prof, rating;
     if($(".captiontext").text()==="Sections Found"){
       $(".datadisplaytable tr td:nth-child(17)").each(function (i,elem) {
+        $(elem).html("(<span class='rating'>?.?</span>) "+  $(elem).html());
+
         prof = $(elem).context.innerText;
         var name = clean_name(prof);
         search_for_prof(name, elem);
@@ -28,10 +27,11 @@ function search_for_prof(name, elem){
         //if no results were found, show ? in place of rating
         if(obj['response']['numFound'] < 1){
           add_rating_to_prof(" ? ", elem)
+        }else{
+          //if results were found, take best match (first item)
+          var id = obj['response']['docs'][0]['pk_id'];
+          get_rating(id, elem);
         }
-        //if results were found, take best match (first item)
-        var id = obj['response']['docs'][0]['pk_id'];
-        get_rating(id, elem);
     });
 }
 
@@ -49,7 +49,7 @@ function get_rating(id, elem){
 }
 
 function add_rating_to_prof(rating, elem){
-    var color = "red";
+    var color = "black";
     if (rating != " ? "){
       if (rating >= 4.0){
         color = "#33cc33";
@@ -57,9 +57,14 @@ function add_rating_to_prof(rating, elem){
         color = "#00ccff";
       }else if(rating >= 2.0){
         color = "#fe7f00";
+      }else{
+        color = "red";
       }
     } 
-    $(elem).html("(<span style='color:"+color+";'>"+rating+"</span>) "+  $(elem).html());
+    //$(elem).html("(<span style='color:"+color+";'>"+rating+"</span>) "+  $(elem).html());
+    $(elem).find(".rating").css("color", color);
+    $(elem).find(".rating").html(rating);
+
 }
 
 //cleans the name displayed on marist course lookup in prep for search
