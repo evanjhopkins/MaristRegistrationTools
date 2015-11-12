@@ -10,9 +10,9 @@ function fireContentLoadedEvent () {
     if($(".captiontext").text()==="Sections Found"){
       $(".datadisplaytable tr td:nth-child(17)").each(function (i,elem) {
         prof = $(elem).context.innerText;
-        professors.push(elem);
+        clean_name(prof);
       });
-      lookup();
+      //lookup();
     }
 }
 
@@ -43,4 +43,22 @@ function lookup(){
         lookup();
     });
   }
+}
+
+//attempts to search RMP for the prof and get their ID
+function search_for_prof(){
+
+}
+
+//cleans the nam displayed on marist course lookup in prep for search
+// "Matthew P. Johnson (P)" --> "Matthew Johnson"
+function clean_name(var name){
+  //split up words in name so we can evaluate each one
+  var exploded_name = name.split(" ");
+  //this will contain only the words we deem valid (no special chars, no initials)
+  var exploded_clean_name = [];
+  //iterate through each word in name
+  exploded_name.forEach(function(word) {
+    console.log(word);
+  });
 }
