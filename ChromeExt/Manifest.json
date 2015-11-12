@@ -2,6 +2,9 @@
     "name": "MaristRegistrationTools",
     "description": "Tools for the Marist registration process",
     "version": "0.2",
+    "icons":{ "16": "icon.png",
+              "48": "icon.png",
+              "128": "icon.png" },
     "permissions": [
     "tabs","<all_urls>"
     ],
