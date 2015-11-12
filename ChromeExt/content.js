@@ -7,7 +7,7 @@ function fireContentLoadedEvent () {
     var prof, rating;
     if($(".captiontext").text()==="Sections Found"){
       $(".datadisplaytable tr td:nth-child(17)").each(function (i,elem) {
-        $(elem).html("(<span class='rating'>?.?</span>) "+  $(elem).html());
+        $(elem).html("(<span class='rating'>_._</span>) "+  $(elem).html());
 
         prof = $(elem).context.innerText;
         if ($.inArray(prof, searched) == -1){
