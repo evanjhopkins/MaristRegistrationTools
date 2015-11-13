@@ -1,19 +1,24 @@
-// alert("hello");
+document.addEventListener('DOMContentLoaded', main, false);
 
-document.addEventListener('DOMContentLoaded', fireContentLoadedEvent, false);
-
-searched = [];
-function fireContentLoadedEvent () {
+searched = [];//tracks profs we've already searched to stop redundant lookups
+function main() {
     var prof, rating;
+
+    //if we are on the correct rendering of the page(i.e. the one that shows actual classes)
     if($(".captiontext").text()==="Sections Found"){
+      //loop through each row
       $(".datadisplaytable tr td:nth-child(17)").each(function (i,elem) {
+        //add placeholder text to row, this will be replaced with actual value
         $(elem).html("(<span class='rating'>_._</span>) "+  $(elem).html());
 
+        //get professor name
         prof = $(elem).context.innerText;
+        //if we dont have this professors rating yet...
         if ($.inArray(prof, searched) == -1){
-          searched.push(prof);
-          var name = clean_name(prof);
-          search_for_prof(name, elem);
+          searched.push(prof);//record that we have searched for this professor so no redundant searched are made
+          var name = clean_name(prof);//convert name to just first and last name
+          search_for_prof(name, elem);//execute search -> get_rating -> add_rating_to_prof
+          //Note: these methods execute in a chain rather than sequential calls on purpose.
         }
       });
     }
@@ -39,6 +44,7 @@ function search_for_prof(name, elem){
     });
 }
 
+//given a RMP id, get their overall rating
 function get_rating(id, elem){
   chrome.runtime.sendMessage({
         method: 'GET',
@@ -53,25 +59,19 @@ function get_rating(id, elem){
 }
 
 function add_rating_to_prof(rating, elem){
-    var color = "black";
-    if (rating != " ? "){
-      if (rating >= 4.0){
-        color = "#33cc33";
-      }else if(rating >= 3.0){
-        color = "#00ccff";
-      }else if(rating >= 2.0){
-        color = "#fe7f00";
-      }else{
-        color = "red";
-      }
-    } 
+    //set color depending on rating range (red=bad, green=good, etc..)
+    var color = color_code_rating(rating);
 
+    //get the name of the professor we have the rating for
     prof = $(elem).context.innerText;
+    //loop through every professor on the page
     $(".datadisplaytable tr td:nth-child(17)").each(function (i,elem2) {
+      //get the name of the professor of this iteration of the loop
       prof2 = $(elem2).context.innerText;
+      //if this professor matches the one we have a rating for
       if (prof == prof2){
-        $(elem2).find(".rating").css("color", color);
-        $(elem2).find(".rating").html(rating);
+        $(elem2).find(".rating").css("color", color);//set color
+        $(elem2).find(".rating").html(rating);//add rating
       }
     });
 }
@@ -97,4 +97,21 @@ function clean_name(name){
   //we only want first and last name
   var clean_name = exploded_clean_name[0]+" "+exploded_clean_name[exploded_clean_name.length-1];
   return clean_name;
+}
+
+//return a color code for a given rating
+function color_code_rating(rating){
+  var color;
+  if (rating != " ? "){
+    if (rating >= 4.0){
+      color = "#33cc33";
+    }else if(rating >= 3.0){
+      color = "#00ccff";
+    }else if(rating >= 2.0){
+      color = "#fe7f00";
+    }else{
+      color = "red";
+    }
+  } 
+  return color;
 }
